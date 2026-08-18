@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Buena Vida Coffee Roasters</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green-deep:#3c4a37;
+  --green:#5c6b4c;
+  --green-soft:#77855f;
+  --cream:#f4efe2;
+  --cream-2:#ece5d3;
+  --ink:#2c2c24;
+  --muted:#6a6a5c;
+  --gold:#c1974d;
+  --line:rgba(60,74,55,.14);
+  --shadow:0 10px 30px rgba(44,44,36,.10);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Jost',-apple-system,BlinkMacSystemFont,sans-serif;
+  background:var(--cream);
+  color:var(--ink);
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+.serif{font-family:'Cormorant Garamond',Georgia,serif}
+img{max-width:100%;display:block}
+
+/* ---------- SCREENS ---------- */
+.screen{display:none;min-height:100dvh}
+.screen.active{display:block}
+
+/* ---------- WELCOME ---------- */
+#welcome{
+  background:linear-gradient(160deg,var(--green-deep) 0%,var(--green) 60%,var(--green-soft) 100%);
+  color:var(--cream);
+  padding:calc(env(safe-area-inset-top) + 46px) 22px 40px;
+  flex-direction:column;align-items:center;text-align:center;position:relative;
+}
+#welcome.active{display:flex}
+.home-lang{position:absolute;top:calc(env(safe-area-inset-top) + 14px);right:16px;
+  display:flex;background:rgba(244,239,226,.14);border-radius:10px;padding:3px}
+.home-lang button{border:none;background:none;color:var(--cream);cursor:pointer;
+  font-family:'Jost',sans-serif;font-size:12px;font-weight:500;letter-spacing:.06em;
+  padding:6px 10px;border-radius:8px;opacity:.65;transition:.2s}
+.home-lang button.on{background:var(--cream);color:var(--green-deep);opacity:1}
+.logo{width:min(66vw,272px);height:auto;margin-top:18px;
+  filter:brightness(0) invert(1);opacity:.96}
+.tagline{margin-top:24px;max-width:300px;font-weight:300;font-size:13.5px;
+  letter-spacing:.04em;opacity:.82;line-height:1.7}
+
+/* primary menu button + language reveal */
+.menu-cta-wrap{width:100%;max-width:360px;margin-top:36px}
+.menu-btn{
+  width:100%;border:none;cursor:pointer;
+  background:var(--cream);color:var(--green-deep);
+  font-family:'Cormorant Garamond',serif;font-weight:600;
+  font-size:24px;letter-spacing:.03em;
+  padding:20px 20px;border-radius:16px;box-shadow:var(--shadow);
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  transition:transform .15s ease, background .2s;
+}
+.menu-btn:active{transform:scale(.98)}
+.menu-btn .chev{transition:transform .3s ease;font-size:15px;font-family:'Jost',sans-serif}
+.menu-btn.open .chev{transform:rotate(180deg)}
+.lang-choices{
+  max-height:0;overflow:hidden;transition:max-height .35s ease,margin .35s ease,opacity .3s;
+  opacity:0;margin-top:0;
+}
+.lang-choices.open{max-height:320px;opacity:1;margin-top:12px}
+.lang-opt{
+  width:100%;border:1.5px solid rgba(244,239,226,.34);background:rgba(244,239,226,.08);
+  color:var(--cream);cursor:pointer;text-decoration:none;
+  font-family:'Jost',sans-serif;font-weight:400;font-size:15.5px;letter-spacing:.03em;
+  padding:15px;border-radius:13px;margin-top:10px;display:flex;align-items:center;
+  justify-content:center;gap:10px;transition:background .2s;
+}
+.lang-opt:active{background:rgba(244,239,226,.2)}
+.lang-opt .flag{font-size:18px}
+
+/* welcome action buttons */
+.cta-stack{width:100%;max-width:360px;margin-top:14px;display:flex;flex-direction:column;gap:12px}
+.wbtn{
+  width:100%;border:none;cursor:pointer;text-decoration:none;
+  font-family:'Jost',sans-serif;font-weight:500;font-size:16px;letter-spacing:.04em;
+  padding:17px 18px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;gap:9px;transition:transform .15s ease,background .2s;
+}
+.wbtn:active{transform:scale(.985)}
+.wbtn .chev{font-size:13px;transition:transform .3s ease}
+.wbtn.open .chev{transform:rotate(180deg)}
+.wbtn.ghost{background:rgba(244,239,226,.09);border:1px solid rgba(244,239,226,.22);color:var(--cream)}
+.wbtn.gold{background:var(--gold);color:#3a2c10}
+.mini{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mini .wbtn{font-size:14px;padding:15px 10px;font-weight:400}
+.welcome-foot{margin-top:36px;font-size:11.5px;opacity:.7;letter-spacing:.04em;line-height:1.9}
+.welcome-foot a{color:var(--cream);text-decoration:none;border-bottom:1px solid rgba(244,239,226,.3)}
+
+/* ---------- MENU ---------- */
+#menu{background:var(--cream)}
+.menu-top{
+  position:sticky;top:0;z-index:30;background:var(--green-deep);color:var(--cream);
+  padding:calc(env(safe-area-inset-top) + 12px) 16px 0;
+  box-shadow:0 4px 18px rgba(44,44,36,.14);
+}
+.menu-top-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:12px}
+.back{background:none;border:none;color:var(--cream);cursor:pointer;font-family:'Jost',sans-serif;
+  font-size:14px;display:flex;align-items:center;gap:6px;opacity:.9;padding:6px 4px}
+.menu-title{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:22px;letter-spacing:.06em}
+.lang-toggle{display:flex;background:rgba(244,239,226,.14);border-radius:10px;padding:3px}
+.lang-toggle button{border:none;background:none;color:var(--cream);cursor:pointer;
+  font-family:'Jost',sans-serif;font-size:12.5px;font-weight:500;letter-spacing:.06em;
+  padding:6px 11px;border-radius:8px;opacity:.65;transition:.2s}
+.lang-toggle button.on{background:var(--cream);color:var(--green-deep);opacity:1}
+
+/* sticky section nav (chips) */
+.nav-chips{overflow-x:auto;padding:0 0 12px;scrollbar-width:none}
+.nav-chips::-webkit-scrollbar{display:none}
+.nav-chips-inner{display:flex;gap:8px;width:max-content;min-width:100%;justify-content:center}
+.chip{white-space:nowrap;border:1px solid rgba(244,239,226,.28);background:rgba(244,239,226,.06);
+  color:var(--cream);cursor:pointer;font-family:'Jost',sans-serif;font-size:13px;font-weight:400;
+  letter-spacing:.03em;padding:8px 15px;border-radius:999px;transition:.2s}
+.chip.on{background:var(--cream);color:var(--green-deep);border-color:transparent;font-weight:500}
+.chip-about{border-color:rgba(193,151,77,.6);color:var(--gold)}
+
+.menu-body{max-width:640px;margin:0 auto;padding:8px 18px 60px}
+.sec{padding-top:26px;scroll-margin-top:var(--hh,132px)}
+.sec-head{display:flex;align-items:baseline;gap:12px;margin-bottom:4px}
+.sec-title{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:30px;color:var(--green-deep);letter-spacing:.01em}
+.sec-rule{flex:1;height:1px;background:var(--line)}
+.sec-note{font-size:12.5px;color:var(--muted);font-style:italic;margin-bottom:14px;letter-spacing:.01em}
+
+.item{padding:15px 0;border-bottom:1px solid var(--line)}
+.item-top{display:flex;justify-content:space-between;gap:14px;align-items:baseline}
+.item-name{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:19.5px;color:var(--ink);line-height:1.2}
+.item-price{font-family:'Jost',sans-serif;font-weight:500;font-size:15px;color:var(--green);white-space:nowrap;letter-spacing:.01em}
+.item-desc{font-size:13.5px;color:var(--muted);margin-top:5px;line-height:1.55;max-width:52ch}
+.tags{margin-top:8px;display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--green);
+  background:rgba(92,107,76,.10);padding:3px 9px;border-radius:999px;font-weight:500}
+
+/* simple price-list items (pastries) */
+.plist{padding:11px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:14px;align-items:baseline}
+.plist .n{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:17.5px;color:var(--ink)}
+.plist .p{font-weight:500;font-size:14.5px;color:var(--green);white-space:nowrap}
+.subsec{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:23px;color:var(--green);
+  letter-spacing:.02em;margin:24px 0 6px;padding-top:8px;border-top:1px solid var(--line)}
+.sec .subsec:first-of-type{border-top:none;padding-top:0;margin-top:10px}
+.sub{font-family:'Jost',sans-serif;font-weight:600;font-size:12px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--gold);margin:16px 0 2px}
+.pl-item{padding:11px 0;border-bottom:1px solid var(--line)}
+.pl-row{display:flex;justify-content:space-between;gap:14px;align-items:baseline}
+.pl-row .n{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:17.5px;color:var(--ink)}
+.pl-row .p{font-weight:500;font-size:14.5px;color:var(--green);white-space:nowrap}
+.pl-desc{font-size:12.5px;color:var(--muted);margin-top:3px;line-height:1.5;max-width:52ch}
+
+.extras{margin-top:16px;background:var(--cream-2);border-radius:12px;padding:13px 16px;
+  display:flex;flex-wrap:wrap;gap:6px 22px;font-size:13px;color:var(--ink)}
+.extras b{color:var(--green);font-weight:500}
+
+.about-body{max-width:640px;margin:0 auto;padding:40px 24px 60px;text-align:center;min-height:50vh}
+.about-title{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:34px;color:var(--green-deep);margin-bottom:16px}
+.about-lead{font-size:16px;color:var(--ink);line-height:1.7;max-width:44ch;margin:0 auto}
+.about-note{font-size:13px;color:var(--muted);font-style:italic;margin-top:22px}
+
+.menu-foot{text-align:center;padding:34px 18px 46px;color:var(--muted);font-size:12px;letter-spacing:.03em;line-height:1.9}
+.menu-foot .bw{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--green-deep);letter-spacing:.12em;margin-bottom:10px}
+.menu-foot a{color:var(--green);text-decoration:none}
+
+.backtop{position:fixed;right:16px;bottom:calc(env(safe-area-inset-bottom) + 16px);z-index:40;
+  width:46px;height:46px;border-radius:50%;border:none;cursor:pointer;
+  background:var(--green-deep);color:var(--cream);font-size:18px;box-shadow:var(--shadow);
+  display:none;align-items:center;justify-content:center}
+.backtop.show{display:flex}
+</style>
+</head>
+<body>
+
+<!-- ================= WELCOME ================= -->
+<section id="welcome" class="screen active">
+  <div class="home-lang">
+    <button id="hES" class="on" onclick="setLang('es')">ES</button>
+    <button id="hEN" onclick="setLang('en')">EN</button>
+  </div>
+  <img class="logo" src="logo.png" alt="Buena Vida Specialty Coffee">
+  <p class="tagline" data-es="100% Costa Rica · Café de especialidad orgánico y regenerativo" data-en="100% Costa Rican · Organic &amp; Regenerative Specialty Coffee">100% Costa Rica · Café de especialidad orgánico y regenerativo</p>
+
+  <div class="menu-cta-wrap">
+    <button class="menu-btn" id="menuBtn" onclick="toggleLang()">
+      <span data-es="Ver Menú" data-en="View Menu">Ver Menú</span>
+      <span class="chev">▾</span>
+    </button>
+    <div class="lang-choices" id="langChoices">
+      <button class="lang-opt" onclick="openMenu('es')">Menú en Español</button>
+      <button class="lang-opt" onclick="openMenu('en')">English Menu</button>
+    </div>
+  </div>
+
+  <div class="cta-stack">
+    <div>
+      <button class="wbtn ghost" id="contactBtn" onclick="toggleContact()">
+        <span data-es="Contáctanos" data-en="Contact Us">Contáctanos</span>
+        <span class="chev">▾</span>
+      </button>
+      <div class="lang-choices" id="contactChoices">
+        <a class="lang-opt" href="https://wa.me/message/F3WTI7DJEDAMD1" target="_blank" rel="noopener"
+           data-es="Reservar una mesa" data-en="Reserve a table">Reservar una mesa</a>
+        <a class="lang-opt" href="https://api.whatsapp.com/message/QJANKCJKQSFAD1" target="_blank" rel="noopener"
+           data-es="Cursos" data-en="Courses">Cursos</a>
+        <a class="lang-opt" href="https://instagram.com/buenavida_coffeeroasters" target="_blank" rel="noopener"
+           data-es="Instagram" data-en="Instagram">Instagram</a>
+      </div>
+    </div>
+
+    <a class="wbtn gold" href="https://www.tripadvisor.com/Restaurant_Review-g309293-d32982777-Reviews-Buena_Vida_Coffee_Roasters-San_Jose_San_Jose_Metro_Province_of_San_Jose.html" target="_blank" rel="noopener"
+       data-es="Reseñas" data-en="Reviews">Reseñas</a>
+
+    <div class="mini">
+      <a class="wbtn ghost" href="https://buenavida.coffee/shop/" target="_blank" rel="noopener"
+         data-es="Tienda de café" data-en="Shop coffee">Tienda de café</a>
+      <a class="wbtn ghost" href="https://www.buenavidacoffeeroasters.com" target="_blank" rel="noopener"
+         data-es="Sitio web" data-en="Website">Sitio web</a>
+    </div>
+  </div>
+
+  <div class="welcome-foot">
+    San José, Costa Rica &nbsp;·&nbsp; (506) 7084-3105<br>
+    <a href="mailto:operaciones@buenavidaroasters.com">operaciones@buenavidaroasters.com</a>
+  </div>
+</section>
+
+<!-- ================= MENU ================= -->
+<section id="menu" class="screen">
+  <div class="menu-top">
+    <div class="menu-top-row">
+      <button class="back" onclick="goHome()">‹ <span data-es="Inicio" data-en="Home">Inicio</span></button>
+      <span class="menu-title">Menú</span>
+      <div class="lang-toggle">
+        <button id="tES" class="on" onclick="setLang('es')">ES</button>
+        <button id="tEN" onclick="setLang('en')">EN</button>
+      </div>
+    </div>
+    <div class="nav-chips" id="navChips"><div class="nav-chips-inner" id="navChipsInner"></div></div>
+  </div>
+  <div class="menu-body" id="menuBody"></div>
+  <div class="menu-foot">
+    <div class="bw">BUENA VIDA</div>
+    <span data-es="Café de especialidad orgánico y regenerativo · San José, Costa Rica" data-en="Organic &amp; regenerative specialty coffee · San José, Costa Rica">Café de especialidad orgánico y regenerativo · San José, Costa Rica</span><br>
+    (506) 7084-3105 · <a href="https://www.buenavidacoffeeroasters.com" target="_blank" rel="noopener">buenavidacoffeeroasters.com</a>
+  </div>
+</section>
+
+<!-- ================= ABOUT ================= -->
+<section id="about" class="screen">
+  <div class="menu-top">
+    <div class="menu-top-row">
+      <button class="back" onclick="goHome()">‹ <span data-es="Inicio" data-en="Home">Inicio</span></button>
+      <span class="menu-title" data-es="Nosotros" data-en="About Us">Nosotros</span>
+      <div class="lang-toggle">
+        <button id="aES" class="on" onclick="setLang('es')">ES</button>
+        <button id="aEN" onclick="setLang('en')">EN</button>
+      </div>
+    </div>
+  </div>
+  <div class="about-body">
+    <h2 class="about-title" data-es="De la finca a la mesa" data-en="Farm to Table">De la finca a la mesa</h2>
+    <p class="about-lead" data-es="Muy pronto contaremos aquí nuestra historia: café orgánico y regenerativo, cultivado y tostado en Costa Rica."
+       data-en="Coming soon: our story — organic, regenerative coffee grown and roasted in Costa Rica.">Muy pronto contaremos aquí nuestra historia: café orgánico y regenerativo, cultivado y tostado en Costa Rica.</p>
+    <p class="about-note" data-es="(Sección en construcción)" data-en="(Section under construction)">(Sección en construcción)</p>
+  </div>
+</section>
+
+<button class="backtop" id="backTop" onclick="scrollTop()">↑</button>
+
+<script>
+/* ---------------- DATA ---------------- */
+const T = {
+  es:{ menuWord:"Menú", home:"Inicio" },
+  en:{ menuWord:"Menu", home:"Home" }
+};
+
+const RAW = [
+  { id:"breakfast", nav:{es:"Desayuno",en:"Breakfast"}, title:{es:"Desayuno",en:"Breakfast"},
+    items:[
+      {n:{es:"Desayuno Tico",en:"Tico Breakfast"},p:"₡7,900",tags:["reg"],
+        d:{es:"Gallo pinto, aguacate, huevos regenerativos de pastoreo al gusto, queso fresco, tortilla casera, plátanos maduros y natilla local.",
+           en:"Gallo pinto (rice & beans), avocado, regenerative pasture-raised eggs prepared to your preference, fresh tico cheese, handmade tortillas, sweet plantains and natilla (local sour cream)."}},
+      {n:{es:"Desayuno Mediterráneo",en:"Mediterranean Breakfast"},p:"₡7,000",tags:["reg"],
+        d:{es:"Hummus, ensalada de pepino y tomate, spread de aceituna kalamata, huevos regenerativos de pastoreo en salsa de tomate especiada, labneh, aceite de oliva. Con pan challah.",
+           en:"Hummus, cucumber & tomato salad, Kalamata olive spread, regenerative pasture-raised eggs in a spiced tomato sauce, labneh, extra virgin olive oil. Served with challah bread."}},
+      {n:{es:"Fresca Floración",en:"Fresca Floración"},p:"₡8,000",tags:["reg"],
+        d:{es:"Pan masa madre, mini mozzarella fresca, pesto de la casa, tomate cherry, mermelada de fresa y chile habanero artesanal, huevos regenerativos de pastoreo. Con ensalada de la casa.",
+           en:"Sourdough, fresh mini mozzarella, house-made pesto, cherry tomatoes, artisan strawberry & habanero jam, regenerative pasture-raised eggs. Served with a house salad."}},
+      {n:{es:"Verde Pastoreo",en:"Verde Pastoreo"},p:"₡8,500",tags:["veg"],
+        d:{es:"Omelette estilo francés, tomate cherry, vegetales y queso feta. Con ensalada de la casa y pan masa madre.",
+           en:"French-style omelet, cherry tomatoes, mixed vegetables and artisan cheese. Served with a house salad and sourdough bread."}},
+      {n:{es:"Tostada Trío de Hongos",en:"Tostada Trío de Hongos"},p:"₡8,500",tags:["reg","veg"],
+        d:{es:"Tostada de masa madre, trío de hongos, aceite ahumado de la casa, spread de chile morrón nacional, huevos regenerativos de pastoreo. Con ensalada de la casa.",
+           en:"Sourdough toast, trio of mushrooms, house-smoked oil, roasted local sweet pepper spread, regenerative pasture-raised eggs. Served with house salad."}},
+      {n:{es:"Prensadas y Tradición",en:"Prensadas & Tradition"},p:"₡7,200",tags:["veg"],
+        d:{es:"Prensadas de queso nacional, con zanahorias y repollo encurtido y una salsa cítrica.",
+           en:"Pressed tortillas with local cheese, served with pickled carrots & cabbage and a citrus sauce."}},
+      {n:{es:"Grilled Cheese Sandwich",en:"Grilled Cheese Sandwich"},p:"₡8,700",tags:["reg"],
+        d:{es:"Pan brioche, mezcla de quesos artesanales, huevo regenerativo de pastoreo frito, cebolla caramelizada y crema de tomate.",
+           en:"Brioche, blend of artisan local cheeses, fried regenerative pasture-raised egg, caramelized onions and tomato cream sauce."}},
+      {n:{es:"Tostada Francesa",en:"French Toast"},p:"₡7,650",
+        d:{es:"Pan brioche, leche especiada, nibs de cacao nacional, coulis de frutos rojos, fruta de temporada y crema batida.",
+           en:"Brioche French toast in spiced milk, local cacao nibs, mixed berry coulis, seasonal fruit and whipped cream."}},
+      {n:{es:"Especial de Walter",en:"Walter Special"},p:"₡13,500",tags:["reg","wagyu"],
+        d:{es:"200 g sirloin Wagyu Cross y 2 huevos regenerativos de pastoreo al gusto. Con pan masa madre y ensalada de la casa.",
+           en:"200 g Wagyu Cross sirloin with two fried regenerative pasture-raised eggs. Served with sourdough bread and a house salad."}},
+      {n:{es:"Ecos del Cafetal",en:"Ecos del Cafetal"},p:"₡7,000",tags:["veg"],
+        d:{es:"Yogurt de café regenerativo Buena Vida, caramelo artesanal, fresa, arándanos, mora, frambuesa, almendra tostada y coco.",
+           en:"Buena Vida regenerative coffee yogurt parfait with caramel, strawberries, blueberries, blackberries, raspberries, toasted almonds and coconut."}},
+      {n:{es:"Mosaico Tropical",en:"Mosaico Tropical"},p:"₡6,600",tags:["veg"],
+        d:{es:"Yogurt de mora, melón, mango, fresa, crema de la casa, granola de la casa, naranja, banano y nibs de cacao nacional.",
+           en:"Blackberry yogurt bowl with melon, mango, strawberries, house cream, house granola, orange, banana and local cacao nibs."}},
+      {n:{es:"Dulce Dosel",en:"Dulce Dosel"},p:"₡6,900",tags:["veg"],
+        d:{es:"Yogurt griego nacional, frutas de temporada, granola fresca, nibs de cacao nacional, chocolates y miel artesanal.",
+           en:"Local Greek yogurt, seasonal fruit, fresh granola, local cacao nibs and artisan honey."}},
+      {n:{es:"Tostada de Aguacate",en:"Avocado Toast"},p:"₡7,500",tags:["reg","veg"],
+        d:{es:"Pan de masa madre, aguacate fresco y huevos regenerativos de pastoreo. Con ensalada de la casa.",
+           en:"Sourdough, fresh avocado and regenerative pasture-raised eggs. Served with a house salad."}},
+      {n:{es:"Tostada de Trucha Ahumada",en:"Smoked Trout Toast"},p:"₡10,000",tags:["reg"],
+        d:{es:"Pan de masa madre, huevos regenerativos de pastoreo, hongos, guacamole y crema de albahaca. Con ensalada de la casa.",
+           en:"Sourdough, regenerative pasture-raised eggs, mushrooms, guacamole and basil cream. Served with a house salad."}},
+    ],
+    extras:{es:["Extra huevo <b>₡750</b>","Extra dos huevos <b>₡1,500</b>"],
+            en:["One extra egg <b>₡750</b>","Two extra eggs <b>₡1,500</b>"]}
+  },
+
+  { id:"sandwiches", nav:{es:"Sándwiches",en:"Sandwiches"}, title:{es:"Sándwiches",en:"Sandwiches"},
+    items:[
+      {n:{es:"Sandwich Capresse",en:"Capresse Sandwich"},p:"₡6,500",tags:["veg"],
+        d:{es:"Pan de masa madre, queso burrata, albahaca fresca, tomate cherry y pesto de albahaca. Con ensalada de la casa.",
+           en:"Sourdough with burrata, fresh basil, cherry tomatoes and basil pesto. Served with house salad."}},
+      {n:{es:"Sandwich de Pollo Cremoso",en:"Creamy Chicken Sandwich"},p:"₡7,000",
+        d:{es:"Pan de masa madre, guacamole, lechuga, tomates cherry, cebolla encurtida y mayo chipotle. Con ensalada de la casa.",
+           en:"Sourdough, guacamole, lettuce, cherry tomatoes, pickled onions and chipotle mayo. Served with house salad."}},
+    ]
+  },
+
+  { id:"pastries", nav:{es:"Pastelería",en:"Pastries"}, title:{es:"Pastelería Artesanal",en:"Artisan Pastries"},
+    note:{es:"Chef Sergio Baltodano",en:"Chef Sergio Baltodano"},
+    groups:[
+      { sub:{es:"Dulce",en:"Sweet"}, list:[
+        {n:{es:"Cheesecake Vasco de Frutos Rojos",en:"Red Fruits Basque Cheesecake"},p:"₡5,200"},
+        {n:{es:"Eclair (Chocolate, Fresa, Caramelo)",en:"Eclair (Chocolate, Strawberry, Caramel)"},p:"₡4,200"},
+        {n:{es:"Esponja de Chocolate (Gluten Friendly)",en:"Chocolate Sponge (Gluten Friendly)"},p:"₡3,500"},
+        {n:{es:"Pastel de Nuez (Gluten Friendly)",en:"Sponge Nut Cake (Gluten Friendly)"},p:"₡4,200"},
+        {n:{es:"Galletas de la casa",en:"House Specialty Cookies"},p:"₡2,400"},
+        {n:{es:"Pie de Limón",en:"Lemon Pie"},p:"₡4,200"},
+        {n:{es:"Profiterol 3 uds. (Chocolate, Fresa, Caramelo)",en:"Profiterol 3 units (Chocolate, Strawberry, Caramel)"},p:"₡4,200"},
+        {n:{es:"Tarta de Ricotta y Dulce de Leche",en:"Ricotta Pie with Dulce de Leche"},p:"₡4,200"},
+        {n:{es:"Arroz con Leche y Dulce de Leche",en:"Rice Pudding with Dulce de Leche"},p:"₡4,200"},
+        {n:{es:"Flan de Naranja y Espuma de Cardamomo",en:"Orange Flan with Cardamom Foam"},p:"₡4,200"},
+        {n:{es:"Pie de Manzana",en:"Apple Pie with Cinnamon Foam"},p:"₡4,200"},
+      ]},
+      { sub:{es:"Salado",en:"Savory"}, list:[
+        {n:{es:"Quiche de Espárragos y Puerros",en:"Asparagus & Leek Quiche"},p:"₡4,200"},
+        {n:{es:"Quiche de Hongos y Tomate Semiseco",en:"Mushroom & Sundried Tomato Quiche"},p:"₡4,200"},
+        {n:{es:"Biscuit Capresse",en:"Capresse Biscuit"},p:"₡3,500"},
+        {n:{es:"Biscuit de Pollo Cremoso",en:"Creamy Chicken Biscuit"},p:"₡3,500"},
+        {n:{es:"Pan de Papa y Eneldo o Pan de Polenta",en:"Potato & Dill Bread or Polenta Bread"},p:"₡2,200"},
+      ]}
+    ]
+  },
+
+  { id:"appetizers", nav:{es:"Entradas",en:"Appetizers"}, title:{es:"Entradas",en:"Appetizers"},
+    items:[
+      {n:{es:"Panes Especiales",en:"Special Breads"},p:"₡7,500",tags:["veg"],
+        d:{es:"Canasta de panes (semillas, challah, polenta, especias) con hummus, labneh casero, aceite de oliva y spread de aceituna kalamata.",
+           en:"Bread basket (seed, challah, polenta, spiced) with hummus, house-made labneh, olive oil and Kalamata olive spread."}},
+      {n:{es:"Corral Cítrico",en:"Corral Cítrico"},p:"₡6,200",
+        d:{es:"Croquetas de pollo, salsa bechamel de eneldo, aliolí cítrico y encurtido de zanahoria y repollo.",
+           en:"Chicken croquettes, dill béchamel, citrus aioli and pickled carrots & cabbage."}},
+      {n:{es:"Encuentro de Mareas",en:"Encuentro de Mareas"},p:"₡9,500",
+        d:{es:"Ceviche estilo peruano con chips de tubérculos artesanales, leche de tigre de coco y maíz dulce asado.",
+           en:"Peruvian-style ceviche with artisan root vegetable chips, coconut tiger's milk and roasted sweet corn."}},
+      {n:{es:"Pradera Artesanal",en:"Pradera Artesanal"},p:"₡6,500 / ₡7,600",
+        d:{es:"Empanadas caseras de carne de res cocida a baja temperatura, con cremoso de albahaca, salsa carnitas y pico de gallo. (2 uds. ₡6,500 · 4 uds. ₡7,600)",
+           en:"House-made empanadas filled with slow-braised beef, basil cream, carnitas sauce and pico de gallo. (2 units ₡6,500 · 4 units ₡7,600)"}},
+      {n:{es:"Red Subterránea",en:"Red Subterránea"},p:"₡8,500",tags:["reg","veg"],
+        d:{es:"Trío de setas con puré cremoso de camote, chips de tubérculos artesanales y dos huevos regenerativos de pastoreo.",
+           en:"Trio of mushrooms with smashed sweet potato, artisan root vegetable chips and two regenerative pasture-raised eggs."}},
+      {n:{es:"Fuego y Tierra",en:"Fuego y Tierra"},p:"₡7,000",tags:["veg"],
+        d:{es:"Berenjena y tomate asado sobre una cama de hummus, con almendras tostadas y chile ají fresco.",
+           en:"Roasted eggplant and tomato on a bed of hummus, with toasted almonds and fresh ají chili."}},
+    ]
+  },
+
+  { id:"salads", nav:{es:"Ensaladas",en:"Salads"}, title:{es:"Ensaladas",en:"Salads"},
+    items:[
+      {n:{es:"Ensalada Mediterránea",en:"Mediterranean Salad"},p:"₡5,600",tags:["veg"],
+        d:{es:"Pepino baby, tomate pera, chile morrón, limón, perejil, almendras tostadas y eneldo fresco, con aceite de oliva extra virgen sobre una cama de hummus.",
+           en:"Baby cucumber, tomatoes, sweet peppers, lemon, parsley, toasted almonds and fresh dill, dressed with olive oil on a bed of hummus."}},
+      {n:{es:"Río Vivo",en:"Río Vivo"},p:"₡8,200",
+        d:{es:"Trucha ahumada nacional, tomate cherry, arúgula, mango fresco, marañón, mix de lechugas, queso feta y aderezo de albahaca.",
+           en:"Local smoked trout, cherry tomatoes, arugula, fresh mango, cashews, mixed greens, feta and basil dressing."}},
+      {n:{es:"Abundancia Circular",en:"Abundancia Circular"},p:"₡7,000",tags:["veg"],
+        d:{es:"Ensalada griega: mix de lechugas, aceitunas, garbanzos crocantes, mini mozzarella, rábano confitado y aderezo tzatziki.",
+           en:"Greek-style salad: mixed greens, olives, crispy chickpeas, mini mozzarella, confit baby radishes and tzatziki dressing."}},
+      {n:{es:"Bosque Seco",en:"Bosque Seco"},p:"₡5,800",tags:["veg"],
+        d:{es:"Repollo morado crocante, arúgula, nuez de nogal y dátiles, con chutney de tamarindo.",
+           en:"Crispy red cabbage and arugula with walnuts and dates, dressed with a tamarindo chutney vinaigrette."}},
+    ]
+  },
+
+  { id:"lunch", nav:{es:"Almuerzos",en:"Lunch"}, title:{es:"Almuerzos",en:"Lunch"},
+    items:[
+      {n:{es:"Naranja del Beneficio",en:"Naranja del Beneficio"},p:"₡10,000",
+        d:{es:"Pollo a la naranja cocinado a baja temperatura, salsa de cerveza Chu·me·ca y naranja, con acelga asada, chilotes ahumados y polvo de cebolla negra.",
+           en:"Slow-cooked orange chicken with Chu·me·ca beer & orange glaze, roasted chard, smoked baby corn and black onion powder."}},
+      {n:{es:"Brisa Marina",en:"Brisa Marina"},p:"₡12,000",
+        d:{es:"Pesca del día, parisién de papa en bechamel de eneldo y almendras tostadas, con hoja de repollo asada marinada en especias.",
+           en:"Catch of the day with Parisienne potatoes in dill béchamel, toasted almonds and a spiced roasted cabbage leaf."}},
+      {n:{es:"Black Honey",en:"Black Honey"},p:"₡21,500",tags:["reg","wagyu"],
+        d:{es:"New York regenerativo Wagyu Cross, demiglace de café regenerativo Buena Vida, crocante de masa madre, hongos salteados y zanahorias mini glaseadas.",
+           en:"Regenerative Wagyu Cross New York with Buena Vida coffee demi-glace, sourdough crisp, sautéed mushrooms and glazed baby carrots."}},
+      {n:{es:"Raíces de la Pradera",en:"Raíces de la Pradera"},p:"₡14,000",tags:["reg","wagyu"],
+        d:{es:"Risotto de hongos con entraña regenerativa Wagyu Cross, mini zanahorias, queso parmesano y crocante fungi.",
+           en:"Mushroom risotto topped with regenerative Wagyu Cross skirt steak, baby carrots, parmesan and a fungi garnish."}},
+      {n:{es:"Lomito Ruby",en:"Ruby Tenderloin"},p:"₡20,500",tags:["reg","wagyu"],
+        d:{es:"Lomito regenerativo Wagyu Cross en salsa de arándanos y fondo de res, sobre puré de papa cremoso y espárragos.",
+           en:"Regenerative Wagyu Cross tenderloin in a blueberry & beef reduction, over creamy mashed potatoes and asparagus."}},
+      {n:{es:"Steak de Coliflor",en:"Cauliflower Steak"},p:"₡8,000",tags:["veg"],
+        d:{es:"Steak de coliflor, salsa romesco, mix de hongos salteados, tomate pera asado y puré de ayote.",
+           en:"Cauliflower steak, romesco sauce, sautéed mushroom mix, roasted tomatoes and smashed pumpkin."}},
+    ]
+  },
+
+  { id:"steak", nav:{es:"Parrilla",en:"Steak"}, title:{es:"Parrilla",en:"From the Grill"},
+    items:[
+      {n:{es:"Lomito Regenerativo Wagyu Cross",en:"Regenerative Wagyu Cross Tenderloin"},p:"₡20,000",tags:["reg","wagyu"],
+        d:{es:"200 g. Con puré de papa cremoso y ensalada fresca con aderezo de la casa.",
+           en:"200 g. Served with creamy mashed potatoes and a fresh salad with house dressing."}},
+      {n:{es:"Entraña Regenerativa Wagyu Cross",en:"Regenerative Wagyu Cross Skirt"},p:"₡18,000",tags:["reg","wagyu"],
+        d:{es:"200 g. Con puré de papa cremoso y ensalada fresca con aderezo de la casa.",
+           en:"200 g. Served with creamy mashed potatoes and a fresh salad with house dressing."}},
+      {n:{es:"New York Regenerativo Wagyu Cross",en:"Regenerative Wagyu Cross New York"},p:"₡23,000",tags:["reg","wagyu"],
+        d:{es:"200 g. Con puré de papa cremoso y ensalada fresca con aderezo de la casa.",
+           en:"200 g. Served with creamy mashed potatoes and a fresh salad with house dressing."}},
+    ]
+  },
+
+  { id:"drinks", nav:{es:"Bebidas",en:"Drinks"}, title:{es:"Bebidas",en:"Drinks"},
+    note:{es:"Café de especialidad orgánico y regenerativo",en:"Organic & regenerative specialty coffee"},
+    groups:[
+      { sub:{es:"Espresso Caliente",en:"Hot Espresso"}, list:[
+        {n:{es:"Espresso",en:"Espresso"},p:"₡1,700"},
+        {n:{es:"Doble Espresso",en:"Double Espresso"},p:"₡2,100"},
+        {n:{es:"Macchiato",en:"Macchiato"},p:"₡2,300"},
+        {n:{es:"Cortado",en:"Cortado"},p:"₡2,300"},
+        {n:{es:"Flat White",en:"Flat White"},p:"₡2,700"},
+        {n:{es:"Latte",en:"Latte"},p:"₡2,500"},
+        {n:{es:"Mocha",en:"Mocha"},p:"₡3,000"},
+        {n:{es:"Americano",en:"Americano"},p:"₡2,000",d:{es:"Grande ₡2,500",en:"Large ₡2,500"}},
+        {n:{es:"Cappuccino",en:"Cappuccino"},p:"₡3,000",d:{es:"Grande ₡3,000",en:"Large ₡3,000"}},
+        {n:{es:"Black & White",en:"Black & White"},p:"₡4,500",d:{es:"Espresso y cortado con leche destilada.",en:"Espresso and cortado with distilled milk."}},
+      ]},
+      { sub:{es:"Espresso Frío",en:"Cold Espresso"}, list:[
+        {n:{es:"Iced Latte",en:"Iced Latte"},p:"₡2,800"},
+        {n:{es:"Cold Brew",en:"Cold Brew"},p:"₡2,700"},
+        {n:{es:"Cold Brew Tonic",en:"Cold Brew Tonic"},p:"₡3,600",d:{es:"Cold brew con agua tónica y fresa.",en:"Cold brew with tonic water and strawberry."}},
+        {n:{es:"Limonada de Cáscara",en:"Dried Coffee Lemonade"},p:"₡3,500",d:{es:"Limonada infusionada con cascarilla de café y cold brew.",en:"Lemonade infused with dried coffee husk and cold brew."}},
+      ]},
+      { sub:{es:"Filtrados",en:"Filter Bar"}, list:[
+        {n:{es:"1 Taza",en:"1 Cup"},p:"₡3,000"},
+        {n:{es:"2 Tazas",en:"2 Cups"},p:"₡3,500"},
+        {n:{es:"3 Tazas",en:"3 Cups"},p:"₡4,500"},
+      ]},
+      { sub:{es:"Sin Café",en:"Non-Coffee"}, list:[
+        {n:{es:"Chai Latte",en:"Chai Latte"},p:"₡2,900",d:{es:"Té negro infusionado con especias y leche.",en:"Black tea infused with spices and milk."}},
+        {n:{es:"Chocolate",en:"Chocolate"},p:"₡3,500",d:{es:"Cacao 80% oscuro con leche.",en:"80% dark cocoa with milk."}},
+        {n:{es:"Té Frío",en:"Iced Tea"},p:"₡2,000"},
+        {n:{es:"Tés e Infusiones",en:"Tea & Infusions"},p:"₡2,000"},
+        {n:{es:"Limonada de la Casa",en:"Homemade Lemonade"},p:"₡2,500",d:{es:"Coco, limón y naranja.",en:"Coconut, lemon and orange."}},
+        {n:{es:"Jugo de Naranja",en:"Orange Juice"},p:"₡2,000"},
+        {n:{es:"Batido de Temporada",en:"Seasonal Smoothie"},p:"₡2,200"},
+        {n:{es:"Matcha Latte",en:"Matcha Latte"},p:"₡3,100"},
+        {n:{es:"Matcha con Fresa",en:"Strawberry Matcha"},p:"₡3,500"},
+        {n:{es:"Matcha Lemonade",en:"Matcha Lemonade"},p:"₡3,500"},
+      ]},
+      { sub:{es:"Adicionales",en:"Add-ons"}, list:[
+        {n:{es:"Leche de Coco",en:"Coconut Milk"},p:"₡500"},
+        {n:{es:"Leche de Almendra",en:"Almond Milk"},p:"₡500"},
+        {n:{es:"Leche de Avena",en:"Oat Milk"},p:"₡500"},
+      ]}
+    ]
+  }
+];
+
+/* compose the 4 top-level sections from the raw category data */
+const byId = id => RAW.find(s=>s.id===id);
+const dGroups = byId('drinks').groups;
+const SECTIONS = [
+  { id:"desayuno", nav:{es:"Desayuno",en:"Breakfast"}, title:{es:"Desayuno",en:"Breakfast"},
+    subs:[ { items: byId('breakfast').items, extras: byId('breakfast').extras } ]
+  },
+  { id:"almuerzo", nav:{es:"Almuerzo",en:"Lunch"}, title:{es:"Almuerzo",en:"Lunch"},
+    subs:[
+      { title:{es:"Entradas",en:"Appetizers"}, items: byId('appetizers').items },
+      { title:{es:"Ensaladas",en:"Salads"}, items: byId('salads').items },
+      { title:{es:"Principales",en:"Main Dishes"}, items: byId('lunch').items },
+      { title:{es:"Parrilla",en:"From the Grill"}, items: byId('steak').items },
+    ]
+  },
+  { id:"bolleria", nav:{es:"Bollería",en:"Bakery"}, title:{es:"Bollería",en:"Bakery"},
+    subs:[
+      { title:{es:"Sándwiches",en:"Sandwiches"}, items: byId('sandwiches').items },
+      { title:{es:"Pastelería",en:"Pastries"}, note: byId('pastries').note, plistGroups: byId('pastries').groups },
+    ]
+  },
+  { id:"bebidas", nav:{es:"Bebidas",en:"Drinks"}, title:{es:"Bebidas",en:"Drinks"},
+    subs:[
+      { title:{es:"Caliente",en:"Hot"}, plist: dGroups[0].list },
+      { title:{es:"Frías",en:"Cold"}, plist: dGroups[1].list },
+      { title:{es:"Filtrados",en:"Filter Bar"}, plist: dGroups[2].list },
+      { title:{es:"Sin Café",en:"Non-Coffee"}, plist: dGroups[3].list },
+      { title:{es:"Adicionales",en:"Add-ons"}, plist: dGroups[4].list },
+    ]
+  }
+];
+
+const TAGS = {
+  reg:{es:"Regenerativo",en:"Regenerative"},
+  veg:{es:"Vegetariano",en:"Vegetarian"},
+  wagyu:{es:"Wagyu Cross",en:"Wagyu Cross"}
+};
+
+/* ---------------- STATE + RENDER ---------------- */
+let lang = 'es';
+
+function applyStaticLang(){
+  document.querySelectorAll('[data-es]').forEach(el=>{
+    el.innerHTML = el.getAttribute('data-'+lang);
+  });
+  document.documentElement.lang = lang;
+}
+
+function itemHTML(it){
+  let h = `<div class="item"><div class="item-top"><div class="item-name">${it.n[lang]}</div><div class="item-price">${it.p}</div></div>`;
+  if(it.d) h += `<div class="item-desc">${it.d[lang]}</div>`;
+  if(it.tags && it.tags.length){
+    h += `<div class="tags">`+it.tags.map(t=>`<span class="tag">${TAGS[t][lang]}</span>`).join('')+`</div>`;
+  }
+  return h + `</div>`;
+}
+function plHTML(it){
+  let h = `<div class="pl-item"><div class="pl-row"><span class="n">${it.n[lang]}</span><span class="p">${it.p}</span></div>`;
+  if(it.d) h += `<div class="pl-desc">${it.d[lang]}</div>`;
+  return h + `</div>`;
+}
+
+function renderMenu(){
+  const body = document.getElementById('menuBody');
+  const chips = document.getElementById('navChipsInner');
+  body.innerHTML = '';
+  chips.innerHTML = '';
+
+  SECTIONS.forEach((s,i)=>{
+    // chip (one per top-level section)
+    const chip = document.createElement('button');
+    chip.className = 'chip'+(i===0?' on':'');
+    chip.textContent = s.nav[lang];
+    chip.dataset.target = s.id;
+    chip.onclick = ()=>{ scrollToSection(s.id); };
+    chips.appendChild(chip);
+
+    // section
+    const sec = document.createElement('div');
+    sec.className = 'sec';
+    sec.id = s.id;
+    let html = `<div class="sec-head"><h2 class="sec-title">${s.title[lang]}</h2><div class="sec-rule"></div></div>`;
+
+    (s.subs || []).forEach(sub=>{
+      if(sub.title) html += `<div class="subsec">${sub.title[lang]}</div>`;
+      if(sub.note)  html += `<div class="sec-note">${sub.note[lang]}</div>`;
+      if(sub.items) sub.items.forEach(it=>{ html += itemHTML(it); });
+      if(sub.plist) sub.plist.forEach(it=>{ html += plHTML(it); });
+      if(sub.plistGroups) sub.plistGroups.forEach(g=>{
+        html += `<div class="sub">${g.sub[lang]}</div>`;
+        g.list.forEach(it=>{ html += plHTML(it); });
+      });
+      if(sub.extras) html += `<div class="extras">`+sub.extras[lang].map(e=>`<span>${e}</span>`).join('')+`</div>`;
+    });
+
+    sec.innerHTML = html;
+    body.appendChild(sec);
+  });
+
+  setupScrollSpy();
+}
+
+/* measured sticky-header height (varies with safe-area inset) */
+function headerH(){
+  const h = document.querySelector('.menu-top');
+  return h ? h.offsetHeight : 132;
+}
+function setHH(){
+  document.documentElement.style.setProperty('--hh', headerH()+'px');
+}
+function scrollToSection(id){
+  const el = document.getElementById(id);
+  if(!el) return;
+  // precise landing: section title sits exactly under the sticky header
+  const top = el.getBoundingClientRect().top + window.scrollY - headerH();
+  window.scrollTo({top, behavior:'smooth'});
+}
+
+/* scrollspy to highlight active chip */
+let secEls = [];
+function setupScrollSpy(){
+  secEls = SECTIONS.map(s=>document.getElementById(s.id));
+  spyActive = null;
+}
+function centerChip(chip){
+  const nav = document.getElementById('navChips');
+  if(!nav || !chip) return;
+  // horizontal-only: move the chip strip, never the page's vertical scroll
+  const c = chip.getBoundingClientRect(), n = nav.getBoundingClientRect();
+  nav.scrollLeft += (c.left + c.width/2) - (n.left + n.width/2);
+}
+let spyActive = null;
+function onMenuScroll(){
+  const y = window.scrollY + headerH() + 20;
+  let active = SECTIONS[0].id;
+  for(const el of secEls){ if(el && el.offsetTop <= y) active = el.id; }
+  if(active !== spyActive){
+    spyActive = active;
+    document.querySelectorAll('.chip').forEach(c=>{
+      const on = c.dataset.target===active;
+      c.classList.toggle('on', on);
+      if(on) centerChip(c);
+    });
+  }
+  document.getElementById('backTop').classList.toggle('show', window.scrollY>500);
+}
+
+/* ---------------- NAV ---------------- */
+function toggleLang(){
+  closeContact();
+  document.getElementById('menuBtn').classList.toggle('open');
+  document.getElementById('langChoices').classList.toggle('open');
+}
+function toggleContact(){
+  closeLang();
+  document.getElementById('contactBtn').classList.toggle('open');
+  document.getElementById('contactChoices').classList.toggle('open');
+}
+function closeLang(){
+  document.getElementById('menuBtn').classList.remove('open');
+  document.getElementById('langChoices').classList.remove('open');
+}
+function closeContact(){
+  document.getElementById('contactBtn').classList.remove('open');
+  document.getElementById('contactChoices').classList.remove('open');
+}
+function openMenu(l){
+  lang = l;
+  syncToggle();
+  applyStaticLang();
+  renderMenu();
+  document.getElementById('welcome').classList.remove('active');
+  document.getElementById('menu').classList.add('active');
+  window.scrollTo(0,0);
+  setHH();
+}
+function openAbout(){
+  syncToggle();
+  applyStaticLang();
+  document.getElementById('welcome').classList.remove('active');
+  document.getElementById('menu').classList.remove('active');
+  document.getElementById('about').classList.add('active');
+  window.scrollTo(0,0);
+}
+function goHome(){
+  document.getElementById('menu').classList.remove('active');
+  document.getElementById('about').classList.remove('active');
+  document.getElementById('welcome').classList.add('active');
+  closeLang();
+  closeContact();
+  window.scrollTo(0,0);
+}
+function setLang(l){ lang=l; syncToggle(); applyStaticLang(); renderMenu(); }
+function syncToggle(){
+  const set=(id,on)=>{const e=document.getElementById(id); if(e) e.classList.toggle('on',on);};
+  set('tES',lang==='es'); set('tEN',lang==='en');
+  set('hES',lang==='es'); set('hEN',lang==='en');
+  set('aES',lang==='es'); set('aEN',lang==='en');
+}
+function scrollTop(){ window.scrollTo({top:0,behavior:'smooth'}); }
+
+window.addEventListener('scroll', ()=>{ if(document.getElementById('menu').classList.contains('active')) onMenuScroll(); });
+window.addEventListener('resize', setHH);
+window.addEventListener('orientationchange', setHH);
+applyStaticLang();
+</script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "name": "buena-vida-menu",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Buena Vida Coffee Roasters QR-code menu (static site)",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
