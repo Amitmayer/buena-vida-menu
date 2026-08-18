@@ -70,18 +70,25 @@ img{max-width:100%;display:block}
 .menu-btn .chev{transition:transform .3s ease;font-size:15px;font-family:'Jost',sans-serif}
 .menu-btn.open .chev{transform:rotate(180deg)}
 .lang-choices{
-  max-height:0;overflow:hidden;transition:max-height .35s ease,margin .35s ease,opacity .3s;
-  opacity:0;margin-top:0;
+  max-height:0;overflow:hidden;opacity:0;margin-top:0;
+  width:86%;margin-left:auto;margin-right:auto;box-sizing:border-box;
+  transition:max-height .35s ease,margin .35s ease,opacity .3s,padding .35s ease;
 }
-.lang-choices.open{max-height:320px;opacity:1;margin-top:12px}
+.lang-choices.open{
+  max-height:340px;opacity:1;margin-top:7px;padding:7px;
+  background:rgba(0,0,0,.2);
+  border:1px solid rgba(244,239,226,.13);
+  border-radius:12px;
+}
 .lang-opt{
-  width:100%;border:1.5px solid rgba(244,239,226,.34);background:rgba(244,239,226,.08);
+  width:100%;border:1px solid rgba(244,239,226,.16);background:rgba(244,239,226,.05);
   color:var(--cream);cursor:pointer;text-decoration:none;
-  font-family:'Jost',sans-serif;font-weight:400;font-size:15.5px;letter-spacing:.03em;
-  padding:15px;border-radius:13px;margin-top:10px;display:flex;align-items:center;
+  font-family:'Jost',sans-serif;font-weight:400;font-size:13.5px;letter-spacing:.03em;
+  padding:11px 13px;border-radius:9px;margin-top:6px;display:flex;align-items:center;
   justify-content:center;gap:10px;transition:background .2s;
 }
-.lang-opt:active{background:rgba(244,239,226,.2)}
+.lang-opt:first-child{margin-top:0}
+.lang-opt:active{background:rgba(244,239,226,.18)}
 .lang-opt .flag{font-size:18px}
 
 /* welcome action buttons */
@@ -224,7 +231,7 @@ img{max-width:100%;display:block}
     <div class="mini">
       <a class="wbtn ghost" href="https://buenavida.coffee/shop/" target="_blank" rel="noopener"
          data-es="Tienda de café" data-en="Shop coffee">Tienda de café</a>
-      <a class="wbtn ghost" href="https://www.buenavidacoffeeroasters.com" target="_blank" rel="noopener"
+      <a class="wbtn ghost" href="https://buenavida.coffee/" target="_blank" rel="noopener"
          data-es="Sitio web" data-en="Website">Sitio web</a>
     </div>
   </div>
