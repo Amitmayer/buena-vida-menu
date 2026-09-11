@@ -159,6 +159,11 @@ img{max-width:100%;display:block}
 .subsec{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:23px;color:var(--green);
   letter-spacing:.02em;margin:24px 0 6px;padding-top:8px;border-top:1px solid var(--line)}
 .sec .subsec:first-of-type{border-top:none;padding-top:0;margin-top:10px}
+.accent-red{border:1px solid #d9a3a0;background:rgba(192,57,43,.05);border-radius:12px;padding:4px 16px 12px;margin-top:24px}
+.accent-red .subsec{color:#b23b32;border-top:none;padding-top:0}
+.accent-red .subsec::after{content:"NUEVO";font-family:'Jost',sans-serif;font-weight:600;font-size:10px;letter-spacing:.12em;color:#fff;background:#b23b32;border-radius:20px;padding:3px 9px;margin-left:10px;vertical-align:middle}
+[lang="en"] .accent-red .subsec::after{content:"NEW"}
+.accent-red .pl-row .p{color:#b23b32}
 .sub{font-family:'Jost',sans-serif;font-weight:600;font-size:12px;letter-spacing:.14em;
   text-transform:uppercase;color:var(--gold);margin:16px 0 2px}
 .pl-item{padding:11px 0;border-bottom:1px solid var(--line)}
@@ -513,6 +518,19 @@ const RAW = [
         {n:{es:"Leche de almendra",en:"Almond milk"},p:"₡800"},
         {n:{es:"Leche de avena",en:"Oat milk"},p:"₡500"},
         {n:{es:"Leche criofiltrada",en:"Cold-filtered milk"},p:"₡500"},
+      ]},
+      { sub:{es:"Cold-Pressed Juice",en:"Cold-Pressed Juice"}, accent:"red",
+        note:{es:"Farm to table. El jugo prensado en frío conserva mejor los nutrientes, vitaminas y enzimas. Su prensado hidráulico sin calor ofrece un sabor más limpio y natural, reduce la oxidación y mantiene la frescura por más tiempo que los extractores tradicionales, que generan calor y aire y afectan la calidad nutricional y el sabor. Disfrutá nuestros jugos prensados en frío, recién hechos.",
+             en:"Farm to table. Cold-pressed juice better preserves nutrients, vitamins and enzymes. Its hydraulic pressing process without heat delivers a cleaner, more natural flavor, reduces oxidation and keeps freshness longer than traditional juicers, which generate heat and air, affecting nutritional quality and flavor. Enjoy our delicious, freshly made cold-pressed juices."}, list:[
+        {n:{es:"Green Juice",en:"Green Juice"},p:"₡4,500",
+          d:{es:"Piña, apio, jengibre, limón, kale y pepino.<br><b>Beneficios:</b> ayuda a eliminar toxinas · mejora la digestión y la salud intestinal · aporta vitaminas A, C y K, hierro y magnesio · fortalece el sistema inmune · aumenta la energía y reduce la fatiga · favorece la salud de la piel y la hidratación.",
+             en:"Pineapple, celery, ginger, lime, kale and cucumber.<br><b>Benefits:</b> helps eliminate toxins · improves digestion and gut health · provides vitamins A, C and K, iron and magnesium · strengthens the immune system · boosts energy and reduces fatigue · supports skin health and hydration."}},
+        {n:{es:"Herb Tonic",en:"Herb Tonic"},p:"₡4,500",
+          d:{es:"Aloe, piña, apio, hierbabuena, jengibre y limón.<br><b>Beneficios:</b> apoya la digestión y ayuda a aliviar la acidez y el estreñimiento leve · fortalece las defensas y aporta antioxidantes naturales · reduce la inflamación · favorece la salud de la piel y la hidratación · puede apoyar la pérdida de peso como complemento de una dieta balanceada.",
+             en:"Aloe, pineapple, celery, spearmint, ginger and lime.<br><b>Benefits:</b> supports digestion, helping relieve acidity and mild constipation · strengthens the body's defenses and provides natural antioxidants · reduces inflammation · supports skin health and hydration · may support weight loss as part of a balanced diet."}},
+        {n:{es:"Ginger Shot",en:"Ginger Shot"},p:"₡4,500",
+          d:{es:"Cúrcuma, jengibre, miel, limón y pimienta negra.<br><b>Beneficios:</b> mejora la digestión y ayuda a reducir náuseas e hinchazón · propiedades antiinflamatorias y antioxidantes · fortalece el sistema inmune, sobre todo con limón o cúrcuma · aporta energía ligera sin cafeína · puede apoyar la salud metabólica y cardiovascular con consumo regular.",
+             en:"Turmeric, ginger, honey, lime and black pepper.<br><b>Benefits:</b> improves digestion, helping reduce nausea and bloating · anti-inflammatory and antioxidant properties · strengthens the immune system, especially with lime or turmeric · provides a light energy boost without caffeine · may support metabolic and cardiovascular health when consumed regularly."}},
       ]}
     ]
   }
@@ -540,13 +558,7 @@ const SECTIONS = [
     ]
   },
   { id:"bebidas", nav:{es:"Bebidas",en:"Drinks"}, title:{es:"Bebidas",en:"Drinks"},
-    subs:[
-      { title:{es:"Caliente",en:"Hot"}, plist: dGroups[0].list },
-      { title:{es:"Frías",en:"Cold"}, plist: dGroups[1].list },
-      { title:{es:"Filtrados",en:"Filter Bar"}, plist: dGroups[2].list },
-      { title:{es:"Sin Café",en:"Non-Coffee"}, plist: dGroups[3].list },
-      { title:{es:"Adicionales",en:"Add-ons"}, note: dGroups[4].note, plist: dGroups[4].list },
-    ]
+    subs: dGroups.map(g=>({ title: g.sub, note: g.note, plist: g.list, accent: g.accent }))
   }
 ];
 
@@ -604,15 +616,17 @@ function renderMenu(){
     let html = `<div class="sec-head"><h2 class="sec-title">${s.title[lang]}</h2><div class="sec-rule"></div></div>`;
 
     (s.subs || []).forEach(sub=>{
-      if(sub.title) html += `<div class="subsec">${sub.title[lang]}</div>`;
-      if(sub.note)  html += `<div class="sec-note">${sub.note[lang]}</div>`;
-      if(sub.items) sub.items.forEach(it=>{ html += itemHTML(it); });
-      if(sub.plist) sub.plist.forEach(it=>{ html += plHTML(it); });
+      let sh = '';
+      if(sub.title) sh += `<div class="subsec">${sub.title[lang]}</div>`;
+      if(sub.note)  sh += `<div class="sec-note">${sub.note[lang]}</div>`;
+      if(sub.items) sub.items.forEach(it=>{ sh += itemHTML(it); });
+      if(sub.plist) sub.plist.forEach(it=>{ sh += plHTML(it); });
       if(sub.plistGroups) sub.plistGroups.forEach(g=>{
-        html += `<div class="sub">${g.sub[lang]}</div>`;
-        g.list.forEach(it=>{ html += plHTML(it); });
+        sh += `<div class="sub">${g.sub[lang]}</div>`;
+        g.list.forEach(it=>{ sh += plHTML(it); });
       });
-      if(sub.extras) html += `<div class="extras">`+sub.extras[lang].map(e=>`<span>${e}</span>`).join('')+`</div>`;
+      if(sub.extras) sh += `<div class="extras">`+sub.extras[lang].map(e=>`<span>${e}</span>`).join('')+`</div>`;
+      html += sub.accent ? `<div class="accent-${sub.accent}">${sh}</div>` : sh;
     });
 
     sec.innerHTML = html;
